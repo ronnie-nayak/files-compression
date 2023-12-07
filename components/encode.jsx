@@ -10,7 +10,9 @@ export default function Encode() {
     //file name ->firstletter+_encoded.txt    //data is encoded text recieved from encode function
 
     try {
-      const res = await fetch(`/api/bucket`, {
+      console.log("downloadFile")
+      console.log(fileName, fileData, session?.user?.email)
+      const res = await fetch(`/api/upload`, {
         method: "POST",
         body: JSON.stringify({
           fileName,
@@ -21,13 +23,16 @@ export default function Encode() {
           "Content-Type": "application/json"
         }
       })
-      const data = res.json()
+      console.log(res)
+      const data = await res.json()
       if (res.ok) {
         console.log(data)
       } else {
+        console.log("res not ok")
         return Promise.reject(data)
       }
     } catch (error) {
+      console.log("error")
       console.log(error)
     }
 
@@ -71,7 +76,7 @@ export default function Encode() {
   return (
     <div
     >
-      <button
+      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
         onClick={encodeFun}
       >Encode</button>
     </div>

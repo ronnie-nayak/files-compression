@@ -1,13 +1,11 @@
+
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 
 
 export async function POST(req) {
+  console.log("POSTers2")
   const { fileName, fileData, email } = await req.json()
   console.log({ fileName, fileData, email })
-  console.log({
-    access: process.env.AWS_ACCESS_KEY_ID,
-    secret: process.env.AWS_SECRET_ACCESS_KEY
-  })
 
   const client = new S3Client({
     region: 'us-east-1',

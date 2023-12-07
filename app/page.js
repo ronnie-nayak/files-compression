@@ -4,9 +4,89 @@ import DragDropFile from "@/components/filedrop";
 import Decode from "@/components/decode";
 import Encode from "@/components/encode";
 import { useSession } from "next-auth/react";
+import React from "react";
+
+
+
+
+
 
 export default function Home() {
   const { data: session } = useSession()
+  const [username, setUsername] = React.useState('')
+  const [password, setPassword] = React.useState('')
+
+
+  async function LogIn(username, password) {
+    //file name ->firstletter+_encoded.txt    //data is encoded text recieved from encode function
+
+    try {
+      const res = await fetch(`/api/login`, {
+        method: "POST",
+        body: JSON.stringify({
+          username,
+          password
+        }),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      const data = await res.json()
+      if (res.ok) {
+        console.log("yeaaaxaaaaaaaaaaaaaaaaaaah")
+        console.log(data)
+        console.log(data?.Item)
+        if (data?.Item) { //email exists
+          if (password === data.Item.password) { //password is correct
+            console.log("user exists password correct")
+          } else {
+            console.log("user exists password incorrect")
+          }
+          return
+        } else {
+          console.log("user does not exist")
+          return
+        }
+      } else {
+        return Promise.reject(data)
+      }
+    } catch (error) {
+      console.log(error)
+      return
+    }
+
+
+    try {
+      const res = await fetch(`/api/signin`, {
+        method: "POST",
+        body: JSON.stringify({
+          username,
+          password
+        }),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      const data = await res.json()
+      if (res.ok) {
+        console.log(data)
+      } else {
+        return Promise.reject(data)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    await LogIn(username, password)
+
+    setUsername('');
+    setPassword('');
+  };
+
   return (
     <div>
       {session?.user ? (
@@ -56,7 +136,21 @@ export default function Home() {
           </div>
         </section >
       ) : (
-        <h1>sign in</h1>
+        <div className="text-black">
+          <form>
+            <input type="text" placeholder="Username" name="username" value={username} required
+              onChange={(event) =>
+                setUsername(event.target.value)
+              }
+            />
+            <input type="password" placeholder="Password" name="password" value={password} required
+              onChange={(event) =>
+                setPassword(event.target.value)
+              }
+            />
+            <button onClick={handleSubmit} type="submit">Login</button>
+          </form>
+        </div>
       )}
     </div>
   );

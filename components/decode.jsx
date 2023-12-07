@@ -12,7 +12,7 @@ export default function Decode() {
     //file name ->firstletter+_encoded.txt    //data is encoded text recieved from encode function
 
     try {
-      const res = await fetch(`/api/bucket`, {
+      const res = await fetch(`/api/upload`, {
         method: "POST",
         body: JSON.stringify({
           fileName,
@@ -23,7 +23,7 @@ export default function Decode() {
           "Content-Type": "application/json"
         }
       })
-      const data = res.json()
+      const data = await res.json()
       if (res.ok) {
         console.log(data)
       } else {
@@ -71,7 +71,7 @@ export default function Decode() {
   return (
     <div
     >
-      <button
+      <button className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
         onClick={decodeFun}
       >Decode</button>
     </div>
