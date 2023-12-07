@@ -89,7 +89,7 @@ export default function Home() {
 
   return (
     <div>
-      {session?.user ? (
+      {!session?.user ? (
         <section
           className="flex flex-col items-center justify-center gap-4 py-8 md:py-10"
           initial={{ opacity: 0, scale: 0.5 }}
