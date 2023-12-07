@@ -1,10 +1,8 @@
 'use client'
-import { Navbar } from "@/components/navbar";
 import { fontSans } from "@/config/fonts";
 import clsx from "clsx";
-import { SessionProvider } from "next-auth/react";
 import { RecoilRoot } from "recoil";
-import './globals.css';
+import '@/styles/globals.css'
 
 
 export default function RootLayout({
@@ -20,14 +18,11 @@ export default function RootLayout({
         )}
       >
         <RecoilRoot>
-          <SessionProvider>
-            <div className="relative flex flex-col h-screen">
-              <Navbar />
-              <main className="container mx-auto max-w-7xl pt-16 px-6 flex-grow">
-                {children}
-              </main>
-            </div>
-          </SessionProvider>
+          <div className="relative flex flex-col h-screen">
+            <main className="container mx-auto max-w-7xl pt-16 px-6 flex-grow">
+              {children}
+            </main>
+          </div>
         </RecoilRoot>
       </body>
     </html>

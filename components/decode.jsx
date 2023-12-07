@@ -1,12 +1,11 @@
 'use client'
 
-import { filesState } from "@/atoms/files";
-import { useSession } from "next-auth/react";
+import { filesState, sessionState } from "@/atoms/files";
 import { useRecoilValue } from "recoil";
 export default function Decode() {
 
   //on clicking decode button this function triggers
-  const { data: session } = useSession()
+  const session = useRecoilValue(sessionState)
   const files = useRecoilValue(filesState)
   async function downloadFile(fileName, fileData) {
     //file name ->firstletter+_encoded.txt    //data is encoded text recieved from encode function
@@ -17,7 +16,7 @@ export default function Decode() {
         body: JSON.stringify({
           fileName,
           fileData,
-          email: session?.user?.email
+          email: session
         }),
         headers: {
           "Content-Type": "application/json"
@@ -43,7 +42,7 @@ export default function Decode() {
       return;
     }
     const fileReader = new FileReader();
-    fileReader.onload = function(fileLoadedEvent) {
+    fileReader.onload = function (fileLoadedEvent) {
       //will see text file now
       const text = fileLoadedEvent?.target?.result; //will get all the written text in file
       const newProduct = { text: text };

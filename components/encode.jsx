@@ -1,23 +1,22 @@
 'use client'
-import { filesState } from "@/atoms/files";
+import { filesState, sessionState } from "@/atoms/files";
 import { useRecoilValue } from "recoil";
-import { useSession } from "next-auth/react";
 
 export default function Encode() {
-  const { data: session } = useSession();
   const files = useRecoilValue(filesState)
+  const session = useRecoilValue(sessionState)
   async function downloadFile(fileName, fileData) {
     //file name ->firstletter+_encoded.txt    //data is encoded text recieved from encode function
 
     try {
       console.log("downloadFile")
-      console.log(fileName, fileData, session?.user?.email)
+      console.log(fileName, fileData, session)
       const res = await fetch(`/api/upload`, {
         method: "POST",
         body: JSON.stringify({
           fileName,
           fileData,
-          email: session?.user?.email
+          email: session
         }),
         headers: {
           "Content-Type": "application/json"
@@ -47,7 +46,7 @@ export default function Encode() {
       return;
     }
     const fileReader = new FileReader();
-    fileReader.onload = function(fileLoadedEvent) {
+    fileReader.onload = function (fileLoadedEvent) {
       //will see text file now
       const text = fileLoadedEvent?.target?.result; //will get all the written text in file
       const newProduct = { text: text };
