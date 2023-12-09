@@ -19,5 +19,5 @@ Services used:
  - CloudWatch
  - Identity and Access Management, IAM
    
-Project taken of cloud at the moment.
+Project taken off cloud at the moment.
 
